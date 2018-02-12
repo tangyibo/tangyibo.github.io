@@ -1,14 +1,14 @@
 {
-    "name": "hux-blog",
-    "title": "Hux Blog",
-    "author": "Hux <huxpro@gmail.com>",
+    "name": "Tang-blog",
+    "title": "Tang Blog",
+    "author": "Tang <inrgihc@126.com>",
     "version": "1.7.0",
-    "homepage": "http://huxpro.github.io",
+    "homepage": "http://tangyibo.github.io",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Huxpro/huxpro.github.io"
+        "url": "https://github.com/tangyibo/tangyibo.github.io.git"
     },
-    "bugs": "https://github.com/Huxpro/huxpro.github.io/issues",
+    "bugs": "https://github.com/tangyibo/tangyibo.github.io/issues",
     "devDependencies": {
         "grunt": "~0.4.5",
         "grunt-contrib-less": "~0.11.4",
