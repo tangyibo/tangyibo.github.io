@@ -5,71 +5,70 @@ category: Greenplum
 tag: [Greenplum]
 ---
 
-ÕâÆªÎÄÕÂÖ÷Òª½éÉÜGreenplum·Ö²¼Ê½°æ±¾¹ÜÀíÓë¼¯ÖĞÊ½¹ÜÀíµÄÒ»Ğ©²îÒì£¬×Ü½áÏÂGreenplum³£ÓÃÃüÁî×÷ÎªÈÕºóµÄËÙ²é±í£¬×îºó½éÉÜGit½ø½×µÄÒ»Ğ©°¸Àı¡£
-±¾ÎÄ·ÖÎªÒÔÏÂ¼¸¸ö²¿·Ö£º
-1. Greenplum²îÒì
+è¿™ç¯‡æ–‡ç« ä¸»è¦ä»‹ç»Greenplumåˆ†å¸ƒå¼ç‰ˆæœ¬ç®¡ç†ä¸é›†ä¸­å¼ç®¡ç†çš„ä¸€äº›å·®å¼‚ï¼Œæ€»ç»“ä¸‹Greenplumå¸¸ç”¨å‘½ä»¤ä½œä¸ºæ—¥åçš„é€ŸæŸ¥è¡¨ï¼Œæœ€åä»‹ç»Gitè¿›é˜¶çš„ä¸€äº›æ¡ˆä¾‹ã€‚
+æœ¬æ–‡åˆ†ä¸ºä»¥ä¸‹å‡ ä¸ªéƒ¨åˆ†ï¼š
+1. Greenplumå·®å¼‚
 
+#ã€ŠGreenplum5-centos7å®‰è£…æŒ‡å—ã€‹
 
-#¡¶Greenplum5-centos7°²×°Ö¸ÄÏ¡·
+## ä¸€ã€åŸºç¡€è½¯ä»¶å‡†å¤‡
 
-## Ò»¡¢»ù´¡Èí¼ş×¼±¸
-
-  (1)ÏÂÔØRPM°²×°°ü
-     ÕâÀï°²×°µÄGP°æ±¾Îª£º5.5.21.2
+  (1)ä¸‹è½½RPMå®‰è£…åŒ…
+     è¿™é‡Œå®‰è£…çš„GPç‰ˆæœ¬ä¸ºï¼š5.5.21.2
      greenplum-db-5.5.21.2-rhel6-x86_64.rpm
-     ÏÂÔØµØÖ·£ºhttps://network.pivotal.io/products/pivotal-gpdb
+     ä¸‹è½½åœ°å€ï¼šhttps://network.pivotal.io/products/pivotal-gpdb
 	 
-  (2)°²×°»ù´¡Èí¼ş°ü 
+  (2)å®‰è£…åŸºç¡€è½¯ä»¶åŒ… 
    yum install -y net-tools which openssh-clients openssh-server less zip unzip iproute.x86_64
    
-## ¶ş¡¢»úÆ÷¹æ»®Óë×¼±¸¹¤×÷
+## äºŒã€æœºå™¨è§„åˆ’ä¸å‡†å¤‡å·¥ä½œ
 
-   £¨1£©»úÆ÷¹æ»®£¨Ò»¸öÖ÷½Úµã£¬Ò»¸ö´Ó½Úµã£¬Á½¸öÊı¾İ½Úµã: rootÕÊºÅµÄÃÜÂëÎª£ºwhistle£©£º
-    ½ÚµãÀàĞÍ     ½ÚµãIP         ½Úµãhostname      ½ÚµãÃèÊö
-	master    172.16.90.151     mdw              master Ö÷½Úµã
-	standby   172.16.90.152     smdw             standby ´Ó½Úµã
-	segment   172.16.90.153     sdw1             Êı¾İ½Úµã1
-	segment   172.16.90.154     sdw2             Êı¾İ½Úµã2
+   ï¼ˆ1ï¼‰æœºå™¨è§„åˆ’ï¼ˆä¸€ä¸ªä¸»èŠ‚ç‚¹ï¼Œä¸€ä¸ªä»èŠ‚ç‚¹ï¼Œä¸¤ä¸ªæ•°æ®èŠ‚ç‚¹: rootå¸å·çš„å¯†ç ä¸ºï¼šwhistleï¼‰ï¼š
+    èŠ‚ç‚¹ç±»å‹     èŠ‚ç‚¹IP         èŠ‚ç‚¹hostname      èŠ‚ç‚¹æè¿°
+	master    172.16.90.151     mdw              master ä¸»èŠ‚ç‚¹
+	standby   172.16.90.152     smdw             standby ä»èŠ‚ç‚¹
+	segment   172.16.90.153     sdw1             æ•°æ®èŠ‚ç‚¹1
+	segment   172.16.90.154     sdw2             æ•°æ®èŠ‚ç‚¹2
 	
-	£¨2£©·Ö±ğÉèÖÃÈıÌ¨Ö÷»úµÄhostname
-	ÔÚmaster»úÆ÷ÉÏ£º
+	ï¼ˆ2ï¼‰åˆ†åˆ«è®¾ç½®ä¸‰å°ä¸»æœºçš„hostname
+	åœ¨masteræœºå™¨ä¸Šï¼š
 	hostnamectl --static set-hostname mdw
-	ÔÚstandby»úÆ÷ÉÏ£º
+	åœ¨standbyæœºå™¨ä¸Šï¼š
 	hostnamectl --static set-hostname smdw
-	ÔÚsegment1»úÆ÷ÉÏ£º
+	åœ¨segment1æœºå™¨ä¸Šï¼š
 	hostnamectl --static set-hostname sdw1
-	ÔÚsegment2»úÆ÷ÉÏ£º
+	åœ¨segment2æœºå™¨ä¸Šï¼š
 	hostnamectl --static set-hostname sdw2
 	
-	ĞèÒªÔÚ/etc/hostsÖĞÉèÖÃ½ÚµãµÄhostname(ÈçÉÏ)£¬²¢ÄÜpingÍ¨¡£
+	éœ€è¦åœ¨/etc/hostsä¸­è®¾ç½®èŠ‚ç‚¹çš„hostname(å¦‚ä¸Š)ï¼Œå¹¶èƒ½pingé€šã€‚
 	
-	£¨3£©¹Ø±Õ·À»ğÇ½
+	ï¼ˆ3ï¼‰å…³é—­é˜²ç«å¢™
 	systemctl stop firewalld
 	systemctl mask firewalld
 	systemctl stop iptables
 	systemctl disable iptables
 	
-   £¨4£©Ã¿Ì¨Ö÷»úÉÏ´´½¨gpadminÓÃ»§Óë×é
+   ï¼ˆ4ï¼‰æ¯å°ä¸»æœºä¸Šåˆ›å»ºgpadminç”¨æˆ·ä¸ç»„
 	groupdel gpadmin
 	userdel gpadmin
 	groupadd -g 530 gpadmin
 	useradd -g 530 -u 530 -m -d /home/gpadmin -s /bin/bash gpadmin
-	passwd gpadmin  ×¢£ººóÃæ¾ù°´ÕÕÃÜÂëÎªgpadmin±àĞ´
+	passwd gpadmin  æ³¨ï¼šåé¢å‡æŒ‰ç…§å¯†ç ä¸ºgpadminç¼–å†™
 	
-	£¨5£©´´½¨½ÚµãÅäÖÃĞÅÏ¢
-	ÔÚmasterÉÏ´´½¨ÎÄ¼şall_hosts£¨ËùÓĞÖ÷»úÃû£©ºÍ all_segs£¨2Ì¨Êı¾İ½ÚµãÖ÷»úÃû£©Â·¾¶¿ÉÒÔ×ÔÑ¡£¬ÕâÀïÓÃ/home/gpadmin/nodes
-	ÎÄ¼şÄÚÈİ£º
-	ÎÄ¼ş/home/gpadmin/nodes/all_hosts:
+	ï¼ˆ5ï¼‰åˆ›å»ºèŠ‚ç‚¹é…ç½®ä¿¡æ¯
+	åœ¨masterä¸Šåˆ›å»ºæ–‡ä»¶all_hostsï¼ˆæ‰€æœ‰ä¸»æœºåï¼‰å’Œ all_segsï¼ˆ2å°æ•°æ®èŠ‚ç‚¹ä¸»æœºåï¼‰è·¯å¾„å¯ä»¥è‡ªé€‰ï¼Œè¿™é‡Œç”¨/home/gpadmin/nodes
+	æ–‡ä»¶å†…å®¹ï¼š
+	æ–‡ä»¶/home/gpadmin/nodes/all_hosts:
 		mdw
 		smdw
 		sdw1
 		sdw2
 
-	ÎÄ¼ş/home/gpadmin/nodes/all_segs:
+	æ–‡ä»¶/home/gpadmin/nodes/all_segs:
 		sdw1
 		sdw2
 		
-## Èı¡¢ÅäÖÃÃ¿Ì¨»úÆ÷µÄÄÚºË²ÎÊı
+## ä¸‰ã€é…ç½®æ¯å°æœºå™¨çš„å†…æ ¸å‚æ•°
    cp /etc/sysctl.conf /etc/sysctl.conf_bak
    vim /etc/sysctl.conf
 
@@ -96,14 +95,14 @@ net.core.wmem_max = 2097152
 vm.overcommit_memory = 2
 --------------------------
   
-   Ö´ĞĞÈçÏÂÊ¹ÄÚºË²ÎÊıÉúĞ§£º
+   æ‰§è¡Œå¦‚ä¸‹ä½¿å†…æ ¸å‚æ•°ç”Ÿæ•ˆï¼š
    sysctl -p
    
-ËÄ¡¢ÅäÖÃÃ¿Ì¨»úÆ÷µÄ×ÊÔ´ÏŞÖÆ²ÎÊı
+å››ã€é…ç½®æ¯å°æœºå™¨çš„èµ„æºé™åˆ¶å‚æ•°
 
 	vim /etc/security/limits.conf
 
-ÉèÖÃÎÄ¼ş/etc/security/limits.confµÄÄÚÈİÈçÏÂ£º
+è®¾ç½®æ–‡ä»¶/etc/security/limits.confçš„å†…å®¹å¦‚ä¸‹ï¼š
 -------------------
 * soft nofile 65536
 * hard nofile 65536
@@ -111,28 +110,28 @@ vm.overcommit_memory = 2
 * hard nproc 131072
 ----------------------
 
-## Îå¡¢°²×°Greenplum
+## äº”ã€å®‰è£…Greenplum
 
-1£¬×¼±¸greenplumÊı¾İ¿â°²×°ÎÄ¼ş(master½Úµã)
-   Â·¾¶£º/home/greenplum/installer£º
+1ï¼Œå‡†å¤‡greenplumæ•°æ®åº“å®‰è£…æ–‡ä»¶(masterèŠ‚ç‚¹)
+   è·¯å¾„ï¼š/home/greenplum/installerï¼š
      greenplum-db-5.X.X-rhel7-x86_64.rpm
 
-2£¬°²×°Èí¼ş(master½Úµã)
+2ï¼Œå®‰è£…è½¯ä»¶(masterèŠ‚ç‚¹)
 
-£¨1£©°²×°Èí¼ş°ü
+ï¼ˆ1ï¼‰å®‰è£…è½¯ä»¶åŒ…
   cd /home/greenplum/installer/
   rpm -Uvh ./greenplum-db-5.X.X-rhel7-x86_64.rpm
-  Ä¬ÈÏ°²×°Â·¾¶ /usr/local/,¼´°²×°µÄÄ¿Â¼Îª£º/usr/local/greenplum-db/
+  é»˜è®¤å®‰è£…è·¯å¾„ /usr/local/,å³å®‰è£…çš„ç›®å½•ä¸ºï¼š/usr/local/greenplum-db/
  
-£¨3£©ÉèÖÃ°²×°Ä¿Â¼µÄÓÃ»§¼°×éÈ¨ÏŞ
-  chown -R gpadmin /usr/local/greenplum*£¨ÔÚ´´½¨gpadminºóÖ´ĞĞ£©
-  chgrp -R gpadmin /usr/local/greenplum*£¨ÔÚ´´½¨gpadminºóÖ´ĞĞ£©
+ï¼ˆ3ï¼‰è®¾ç½®å®‰è£…ç›®å½•çš„ç”¨æˆ·åŠç»„æƒé™
+  chown -R gpadmin /usr/local/greenplum*ï¼ˆåœ¨åˆ›å»ºgpadminåæ‰§è¡Œï¼‰
+  chgrp -R gpadmin /usr/local/greenplum*ï¼ˆåœ¨åˆ›å»ºgpadminåæ‰§è¡Œï¼‰
   
-£¨3£©²é¿´»ñÈ¡»·¾³²ÎÊı
+ï¼ˆ3ï¼‰æŸ¥çœ‹è·å–ç¯å¢ƒå‚æ•°
   source /usr/local/greenplum-db/greenplum_path.sh
   echo $GPHOME
 
- £¨4£©¿½±´master½Úµã¹«Ô¿ÖÁÆäËû¸÷¸ö½Úµã    
+ ï¼ˆ4ï¼‰æ‹·è´masterèŠ‚ç‚¹å…¬é’¥è‡³å…¶ä»–å„ä¸ªèŠ‚ç‚¹    
   cd /usr/local/greenplum-db/bin
   source /usr/local/greenplum-db/greenplum_path.sh
   gpssh-exkeys -f /home/gpadmin/nodes/all_hosts
@@ -146,7 +145,7 @@ vm.overcommit_memory = 2
 [STEP 3 of 5] authorize current user on remote hosts
   ... send to smdw
   ***
-  *** Enter password for smdw: £¨»úÆ÷µÄrootÕÊºÅµÄÃÜÂë:whistle£©
+  *** Enter password for smdw: ï¼ˆæœºå™¨çš„rootå¸å·çš„å¯†ç :whistleï¼‰
   ... send to sdw1
   ... send to sdw2
 
@@ -160,7 +159,7 @@ vm.overcommit_memory = 2
 [INFO] completed successfully
 ---------------------------------------------------------
   
- £¨5£©ÔËĞĞgpseginstall¹¤¾ß
+ ï¼ˆ5ï¼‰è¿è¡Œgpseginstallå·¥å…·
   cd /usr/local/greenplum-db/bin
   source /usr/local/greenplum-db/greenplum_path.sh
   gpseginstall -f /home/gpadmin/nodes/all_hosts -u gpadmin
@@ -194,8 +193,8 @@ binary_dir_name greenplum-db-5.21.2
 20190902:16:51:55:019873 gpseginstall:mdw:root-[INFO]:-remote command: chown -R gpadmin:gpadmin /usr/local/greenplum-db
 20190902:16:51:56:019873 gpseginstall:mdw:root-[INFO]:-remote command: chown -R gpadmin:gpadmin /usr/local/greenplum-db-5.21.2
 20190902:16:51:56:019873 gpseginstall:mdw:root-[INFO]:-rm -f /usr/local/greenplum-db-5.21.2.tar.gz
-Please enter a password: (ÕâÀïÊäÈë£ºgpadmin)
-Confirm password: (ÕâÀïÊäÈë£ºgpadmin)
+Please enter a password: (è¿™é‡Œè¾“å…¥ï¼šgpadmin)
+Confirm password: (è¿™é‡Œè¾“å…¥ï¼šgpadmin)
 20190902:16:52:05:019873 gpseginstall:mdw:root-[INFO]:-Changing system passwords ...
 20190902:16:52:06:019873 gpseginstall:mdw:root-[INFO]:-exchange ssh keys for user root
 20190902:16:52:09:019873 gpseginstall:mdw:root-[INFO]:-exchange ssh keys for user gpadmin
@@ -206,40 +205,40 @@ Confirm password: (ÕâÀïÊäÈë£ºgpadmin)
 20190902:16:52:14:019873 gpseginstall:mdw:root-[INFO]:-remote command: . /usr/local/greenplum-db-5.21.2/greenplum_path.sh; /usr/local/greenplum-db-5.21.2/bin/gpssh --version
 20190902:16:52:14:019873 gpseginstall:mdw:root-[INFO]:-SUCCESS -- Requested commands completed
 -----------------------------------------------------------
-ÖÁ´ËÍê³ÉÆäËû2Ì¨Ö÷»úµÄ°²×°
+è‡³æ­¤å®Œæˆå…¶ä»–2å°ä¸»æœºçš„å®‰è£…
 
-  £¨6£©ÇĞ»»µ½gpadminÓÃ»§ÑéÖ¤ÎŞÃÜÂëµÇÂ¼
+  ï¼ˆ6ï¼‰åˆ‡æ¢åˆ°gpadminç”¨æˆ·éªŒè¯æ— å¯†ç ç™»å½•
 	su - gpadmin
 	source /usr/local/greenplum-db/greenplum_path.sh
 	gpssh -f /home/gpadmin/nodes/all_hosts -e ls -l $GPHOME
 
-  £¨7£©ÅäÖÃ»·¾³±äÁ¿
-	ÔÚÉÏÊö£¨6£©ÇĞ»»µ½gpadminÕÊºÅÇ°ÌáÏÂ£º
+  ï¼ˆ7ï¼‰é…ç½®ç¯å¢ƒå˜é‡
+	åœ¨ä¸Šè¿°ï¼ˆ6ï¼‰åˆ‡æ¢åˆ°gpadminå¸å·å‰æä¸‹ï¼š
 	vim ~/.bashrc
 	
 ---------------------------------------------------------------
 	source /usr/local/greenplum-db/greenplum_path.sh
-	export MASTER_DATA_DIRECTORY=/home/gpadmin/data/master/gpseg-1/  (¸ÄÄ¿Â¼ÊÂÏÈ½¨ºÃ)
+	export MASTER_DATA_DIRECTORY=/home/gpadmin/data/master/gpseg-1/  (æ”¹ç›®å½•äº‹å…ˆå»ºå¥½)
 	export PGPORT=5432
 	export PGUSER=gpadmin
-	export PGDATABASE=postgres                   £¨Ä¬ÈÏÊı¾İ¿â£©
+	export PGDATABASE=postgres                   ï¼ˆé»˜è®¤æ•°æ®åº“ï¼‰
 ---------------------------------------------------------------
 
-	Ê¹»·¾³±äÁ¿ÉúĞ§£ºsource ~/.bashrc 
+	ä½¿ç¯å¢ƒå˜é‡ç”Ÿæ•ˆï¼šsource ~/.bashrc 
 
-	£¨8£©Ê¹ÓÃgpssh¹¤¾ßÔÚËùÓĞsegmentÖ÷»úÉÏ´´½¨Ö÷Êı¾İºÍ¾µÏñÊı¾İÄ¿Â¼£¬Èç¹ûÃ»ÓĞÉèÖÃ¾µÏñ¿ÉÒÔ²»´´½¨mirrorÄ¿Â¼£¨Ö´ĞĞÏÂÃæÃüÁî£©:
+	ï¼ˆ8ï¼‰ä½¿ç”¨gpsshå·¥å…·åœ¨æ‰€æœ‰segmentä¸»æœºä¸Šåˆ›å»ºä¸»æ•°æ®å’Œé•œåƒæ•°æ®ç›®å½•ï¼Œå¦‚æœæ²¡æœ‰è®¾ç½®é•œåƒå¯ä»¥ä¸åˆ›å»ºmirrorç›®å½•ï¼ˆæ‰§è¡Œä¸‹é¢å‘½ä»¤ï¼‰:
 	 gpssh -f /home/gpadmin/nodes/all_segs -e 'mkdir -p /home/gpadmin/data/gpseg'
  
-	£¨9£©ÔÚMasterÖ÷»úÉÏ£¬Í¨¹ıNTPÊØ»¤½ø³ÌÍ¬²½ÏµÍ³Ê±ÖÓ£¨ÂÔ£©
+	ï¼ˆ9ï¼‰åœ¨Masterä¸»æœºä¸Šï¼Œé€šè¿‡NTPå®ˆæŠ¤è¿›ç¨‹åŒæ­¥ç³»ç»Ÿæ—¶é’Ÿï¼ˆç•¥ï¼‰
 
-	£¨10£©¼ì²âÏµÍ³»·¾³£¨rootÕÊºÅÏÂ£©
+	ï¼ˆ10ï¼‰æ£€æµ‹ç³»ç»Ÿç¯å¢ƒï¼ˆrootå¸å·ä¸‹ï¼‰
 	   source /usr/local/greenplum-db/greenplum_path.sh
 	   cd /home/gpadmin/
 	   
-	  a)MasterÉÏ½øĞĞÖ÷»úOS²ÎÊı¼ì²â
+	  a)Masterä¸Šè¿›è¡Œä¸»æœºOSå‚æ•°æ£€æµ‹
 	   gpcheck -f /home/gpadmin/nodes/all_hosts -m mdw
 	   ----------------------------------------------------------------------
-		gpcheckÊ±Óöµ½µÄÒ»Ğ©±¨´í½â¾ö£º
+		gpcheckæ—¶é‡åˆ°çš„ä¸€äº›æŠ¥é”™è§£å†³ï¼š
 		$ gpssh -f /home/gpadmin/nodes/all_hosts -e 'echo deadline > /sys/block/sr0/queue/scheduler'
 		$ gpssh -f /home/gpadmin/nodes/all_hosts -e 'echo deadline > /sys/block/sr1/queue/scheduler'
 		$ gpssh -f /home/gpadmin/nodes/all_hosts -e 'echo deadline > /sys/block/sda/queue/scheduler'
@@ -247,45 +246,45 @@ Confirm password: (ÕâÀïÊäÈë£ºgpadmin)
 		$ /sbin/blockdev --getra /dev/sda*
 	   ----------------------------------------------------------------------
 	   
-	   b)MasterÉÏ¼ì²éÍøÂçĞÔÄÜ
+	   b)Masterä¸Šæ£€æŸ¥ç½‘ç»œæ€§èƒ½
 	   $ gpcheckperf -f /home/gpadmin/nodes/all_segs -r N -d /tmp > subnet1.out
 	   $ cat subnet1.out
 	   
-	   c)MasterÉÏ¼ì²é´ÅÅÌI/OºÍÄÚ´æ´ø¿í
+	   c)Masterä¸Šæ£€æŸ¥ç£ç›˜I/Oå’Œå†…å­˜å¸¦å®½
 	   $ gpcheckperf -f /home/gpadmin/nodes/all_hosts -d /home/data/gpseg -r ds
    
-## Áù¡¢³õÊ¼»¯GreenplumÊı¾İ¿â
+## å…­ã€åˆå§‹åŒ–Greenplumæ•°æ®åº“
 
-1. ³õÊ¼»¯Êı¾İ¿â
+1. åˆå§‹åŒ–æ•°æ®åº“
 
-	(1)ÔÚmaster½ÚµãÉÏÇĞ»»ÖÁgpadminÕÊºÅÏÂ£º
+	(1)åœ¨masterèŠ‚ç‚¹ä¸Šåˆ‡æ¢è‡³gpadminå¸å·ä¸‹ï¼š
 	su - gpadmin
 	
-    (2)´ÓÄ£°åÖĞ¿½±´Ò»·İgpinitsystem_configÎÄ¼ş
+    (2)ä»æ¨¡æ¿ä¸­æ‹·è´ä¸€ä»½gpinitsystem_configæ–‡ä»¶
     #cp $GPHOME/docs/cli_help/gpconfigs/gpinitsystem_config /home/gpadmin/gpinitsystem_config
 	
-	(3)¸ù¾İÎÄ¼şÖĞµÄÅäÖÃÄ¿Â¼ÔÚÈıÌ¨»úÆ÷ÉÏ´´½¨ÏàÓ¦µÄÄ¿Â¼£º
-	mkdir -p /home/gpadmin/data/master    (ÔÚmdwÖ÷»úÉÏ)
-	mkdir -p /home/gpadmin/data/master    (ÔÚstandbyÖ÷»úÉÏ)
-	mkdir -p /home/gpadmin/data/primary   (ÔÚsdw1Ö÷»úÉÏ)
-	mkdir -p /home/gpadmin/data/primary   (ÔÚsdw2Ö÷»úÉÏ)
+	(3)æ ¹æ®æ–‡ä»¶ä¸­çš„é…ç½®ç›®å½•åœ¨ä¸‰å°æœºå™¨ä¸Šåˆ›å»ºç›¸åº”çš„ç›®å½•ï¼š
+	mkdir -p /home/gpadmin/data/master    (åœ¨mdwä¸»æœºä¸Š)
+	mkdir -p /home/gpadmin/data/master    (åœ¨standbyä¸»æœºä¸Š)
+	mkdir -p /home/gpadmin/data/primary   (åœ¨sdw1ä¸»æœºä¸Š)
+	mkdir -p /home/gpadmin/data/primary   (åœ¨sdw2ä¸»æœºä¸Š)
 	
-	(4)Ö´ĞĞ³õÊ¼»¯
+	(4)æ‰§è¡Œåˆå§‹åŒ–
 	$ gpinitsystem -c /home/gpadmin/gpinitsystem_config -h /home/gpadmin/nodes/all_segs
-	´ıÃüÁî³õÊ¼»¯³É¹¦ºó£¬ÈıÌ¨»úÆ÷ÉÏ¼´ÒÑ¾­³É¹¦Æô¶¯ÁËgreenplumÊı¾İ¿âÁË¡£
+	å¾…å‘½ä»¤åˆå§‹åŒ–æˆåŠŸåï¼Œä¸‰å°æœºå™¨ä¸Šå³å·²ç»æˆåŠŸå¯åŠ¨äº†greenplumæ•°æ®åº“äº†ã€‚
 
-	(5)Ôö¼ÓmasterµÄ´Ó½Úµã£º
+	(5)å¢åŠ masterçš„ä»èŠ‚ç‚¹ï¼š
 	$ gpinitstandby -s smdw
 
-2, ·ÃÎÊÊı¾İ¿â
+2, è®¿é—®æ•°æ®åº“
 # psql -d postgres
 
 	psql (8.2.15)
 	Type "help" for help.
 	postgres=#
-	³öÏÖÒÔÉÏ½çÃæ£¬¹§Ï²ÄãÒÑ¾­°²×°³É¹¦ÁË¡£
+	å‡ºç°ä»¥ä¸Šç•Œé¢ï¼Œæ­å–œä½ å·²ç»å®‰è£…æˆåŠŸäº†ã€‚
 
-	ÊäÈë²éÑ¯Óï¾ä£¬²é¿´ÊÇ·ñ¿ÉÒÔÖ´ĞĞ¡£
+	è¾“å…¥æŸ¥è¯¢è¯­å¥ï¼ŒæŸ¥çœ‹æ˜¯å¦å¯ä»¥æ‰§è¡Œã€‚
 
 	postgres=# select datname,datdba,encoding,datacl from pg_database;
 
@@ -296,48 +295,48 @@ Confirm password: (ÕâÀïÊäÈë£ºgpadmin)
 	 template0 |     10 |        6 | {=c/gpadmin,gpadmin=CTc/gpadmin}
 	(3 rows)
 	
-	postgres=# \q£¨ÍË³ö£©
+	postgres=# \qï¼ˆé€€å‡ºï¼‰
 
-3  ÓÃ»§´´½¨ÃÜÂë
+3  ç”¨æˆ·åˆ›å»ºå¯†ç 
 	postgres =# alter role gpadmin with password 'gpadmin';
 	
-4£¬Æô¶¯ºÍÍ£Ö¹Êı¾İ¿â²âÊÔ
+4ï¼Œå¯åŠ¨å’Œåœæ­¢æ•°æ®åº“æµ‹è¯•
 
- £¨1£©Æô¶¯
+ ï¼ˆ1ï¼‰å¯åŠ¨
   $ gpstart
   
- £¨2£©Í£Ö¹ 
+ ï¼ˆ2ï¼‰åœæ­¢ 
   $ gpstop
-  »òÕß£ºÇ¿ÖÆÍ£Ö¹
+  æˆ–è€…ï¼šå¼ºåˆ¶åœæ­¢
   gpstop -M fast
 	
-5 ÅäÖÃÔ¶³ÌµÇÂ¼	
-  £¨1£©pg_hba.confÅäÖÃÎÄ¼ş 
-     greenplumÊı¾İ¿âµ×²ã·â×°µÄÊÇ postgresql Êı¾İ¿â£¬Óë pg Êı¾İ¿âÒ»Ñù£¬ÒªÏëµÇÂ¼Êı¾İ¿â£¬ĞèÏÈÅäÖÃÊı¾İ¿â°×Ãûµ¥£¬¼´ÔÊĞíµÇÂ¼µÄÊı¾İ¿âÏà¹ØĞÅÏ¢¡£ÅäÖÃÎÄ¼şÎªÎ»ÓÚ MASTER ½ÚµãµÄÊı¾İÄ¿Â¼Ö®ÏÂµÄ pg_hba.conf ÎÄ¼ş¡£
+5 é…ç½®è¿œç¨‹ç™»å½•	
+  ï¼ˆ1ï¼‰pg_hba.confé…ç½®æ–‡ä»¶ 
+     greenplumæ•°æ®åº“åº•å±‚å°è£…çš„æ˜¯ postgresql æ•°æ®åº“ï¼Œä¸ pg æ•°æ®åº“ä¸€æ ·ï¼Œè¦æƒ³ç™»å½•æ•°æ®åº“ï¼Œéœ€å…ˆé…ç½®æ•°æ®åº“ç™½åå•ï¼Œå³å…è®¸ç™»å½•çš„æ•°æ®åº“ç›¸å…³ä¿¡æ¯ã€‚é…ç½®æ–‡ä»¶ä¸ºä½äº MASTER èŠ‚ç‚¹çš„æ•°æ®ç›®å½•ä¹‹ä¸‹çš„ pg_hba.conf æ–‡ä»¶ã€‚
      vim $MASTER_DATA_DIRECTORY/pg_hba.conf
   
-	¸ÃÎÄ¼şµÄ¼ÇÂ¼ÓĞ5¸ö×Ö¶Î£¬´ú±íµÄÒâÒåÎª£º
-	1¡¢Á¬½Ó·½Ê½
-	·Ö±ğÊÇ£º¡°local¡±Ê¹ÓÃ±¾µØunixÌ×½Ó×Ö£¬¡°host¡±Ê¹ÓÃTCP/IPÁ¬½Ó£¨°üÀ¨SSLºÍ·ÇSSL£©£¬¡°hostssl¡±Ö»ÄÜÊ¹ÓÃSSL TCP/IPÁ¬½Ó£¬¡°hostnossl¡±²»ÄÜÊ¹ÓÃSSL TCP/IPÁ¬½Ó¡£
-	2¡¢Êı¾İ¿âÃû
-	¿ÉÍ¨¹ıÊ¹ÓÃ all ¹Ø¼ü×Ö±íÊ¾ËùÓĞµÄÊı¾İ¿â
-	3¡¢ÓÃ»§Ãû
-	¶à¸öÓÃ»§Í¨¹ı¶ººÅ¸ô¿ª
-	4¡¢±»ÔÊĞíÁ¬½ÓµÄ·şÎñÆ÷µØÖ·
-	5¡¢ÈÏÖ¤·½Ê½
-	ident£¬md5£¬password£¨Ã÷ÎÄÃÜÂë£©£¬trust£¨ÎŞĞèÃÜÂë£©£¬reject£¨¾Ü¾øÈÏÖ¤£©
-  £¨2£©postgresql.confÅäÖÃÎÄ¼ş 
-     ½«ÅäÖÃÎÄ¼şpostgresql.confµÄlisten_addressesĞŞ¸ÄÎª¼àÌıËùÓĞ,Ò²¾ÍÊÇlisten_addresses = '*'
+	è¯¥æ–‡ä»¶çš„è®°å½•æœ‰5ä¸ªå­—æ®µï¼Œä»£è¡¨çš„æ„ä¹‰ä¸ºï¼š
+	1ã€è¿æ¥æ–¹å¼
+	åˆ†åˆ«æ˜¯ï¼šâ€œlocalâ€ä½¿ç”¨æœ¬åœ°unixå¥—æ¥å­—ï¼Œâ€œhostâ€ä½¿ç”¨TCP/IPè¿æ¥ï¼ˆåŒ…æ‹¬SSLå’ŒéSSLï¼‰ï¼Œâ€œhostsslâ€åªèƒ½ä½¿ç”¨SSL TCP/IPè¿æ¥ï¼Œâ€œhostnosslâ€ä¸èƒ½ä½¿ç”¨SSL TCP/IPè¿æ¥ã€‚
+	2ã€æ•°æ®åº“å
+	å¯é€šè¿‡ä½¿ç”¨ all å…³é”®å­—è¡¨ç¤ºæ‰€æœ‰çš„æ•°æ®åº“
+	3ã€ç”¨æˆ·å
+	å¤šä¸ªç”¨æˆ·é€šè¿‡é€—å·éš”å¼€
+	4ã€è¢«å…è®¸è¿æ¥çš„æœåŠ¡å™¨åœ°å€
+	5ã€è®¤è¯æ–¹å¼
+	identï¼Œmd5ï¼Œpasswordï¼ˆæ˜æ–‡å¯†ç ï¼‰ï¼Œtrustï¼ˆæ— éœ€å¯†ç ï¼‰ï¼Œrejectï¼ˆæ‹’ç»è®¤è¯ï¼‰
+  ï¼ˆ2ï¼‰postgresql.confé…ç½®æ–‡ä»¶ 
+     å°†é…ç½®æ–‡ä»¶postgresql.confçš„listen_addressesä¿®æ”¹ä¸ºç›‘å¬æ‰€æœ‰,ä¹Ÿå°±æ˜¯listen_addresses = '*'
 
-6 ½¨Òé
-  £¨1£©ÔÚmaster½ÚµãÉÏÍ¨¹ıcrontabÉèÖÃ¶¨ÆÚÇåÀípgµÄÈÕÖ¾
+6 å»ºè®®
+  ï¼ˆ1ï¼‰åœ¨masterèŠ‚ç‚¹ä¸Šé€šè¿‡crontabè®¾ç½®å®šæœŸæ¸…ç†pgçš„æ—¥å¿—
    */10 * * * * (rm -f /home/gpadmin/data/master/gpseg-1/pg_log/gpdb-*.csv)
 	 
 7 FAQ
-	£¨1£©20190902:15:18:30:014016 gpstart:mdw:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1529)
-Ö»ÄÜÅäÖÃsegment½Úµã£¬ÓÃ×÷´ÅÅÌ¶ÁĞ´µÄÄÚ´æ»º³åÇø,¿ªÊ¼¿ÉÒÔÉèÖÃÒ»¸ö½ÏĞ¡µÄÖµ£¬±ÈÈç×ÜÄÚ´æµÄ15%£¬È»ºóÖğ½¥Ôö¼Ó£¬¹ı³ÌÖĞ¼à¿ØĞÔÄÜÌáÉıºÍswapµÄÇé¿ö¡£ÒÔÉÏµÄ»º³åÇøµÄ²ÎÊıÎª125MB£¬´ËÖµ²»Ò×ÉèÖÃ¹ı´ó£¬¹ı´ó»òµ¼ÖÂ´íÎó¡£
+	ï¼ˆ1ï¼‰20190902:15:18:30:014016 gpstart:mdw:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1529)
+åªèƒ½é…ç½®segmentèŠ‚ç‚¹ï¼Œç”¨ä½œç£ç›˜è¯»å†™çš„å†…å­˜ç¼“å†²åŒº,å¼€å§‹å¯ä»¥è®¾ç½®ä¸€ä¸ªè¾ƒå°çš„å€¼ï¼Œæ¯”å¦‚æ€»å†…å­˜çš„15%ï¼Œç„¶åé€æ¸å¢åŠ ï¼Œè¿‡ç¨‹ä¸­ç›‘æ§æ€§èƒ½æå‡å’Œswapçš„æƒ…å†µã€‚ä»¥ä¸Šçš„ç¼“å†²åŒºçš„å‚æ•°ä¸º125MBï¼Œæ­¤å€¼ä¸æ˜“è®¾ç½®è¿‡å¤§ï¼Œè¿‡å¤§æˆ–å¯¼è‡´é”™è¯¯ã€‚
 gpconfig -c shared_buffers -v "125MB"
-	(2) ³£¼ûÎÊÌâFAQ
+	(2) å¸¸è§é—®é¢˜FAQ
 https://blog.csdn.net/q936889811/article/details/85612046
 http://www.360doc.com/content/19/0430/17/37882969_832566583.shtml
 
