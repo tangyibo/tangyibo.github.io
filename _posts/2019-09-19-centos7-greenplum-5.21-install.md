@@ -9,6 +9,7 @@ tag: [Greenplum]
 本文分为以下几个部分：
 1. Greenplum差异
 
+
 #《Greenplum5-centos7安装指南》
 
 ## 一、基础软件准备
