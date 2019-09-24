@@ -1,22 +1,22 @@
 ---
 layout: post
-title: Greenplum安装教程|Greenplum数据库
+title: Greenplum安装|Greenplum数据库
 category: Greenplum
 tag: [Greenplum]
 ---
 
-这篇文章主要介绍Greenplum分布式版本管理与集中式管理的一些差异，总结下Greenplum常用命令作为日后的速查表，最后介绍Git进阶的一些案例。
+这篇文章主要介绍Greenplum分布式MPP数据库V5.21版本在CentOS7操作系统环境下的安装过程。
 本文分为以下几个部分：
-1. Greenplum的安装准备
-2. Greenplum的安装步骤
+1. Greenplum基础软件包的安装准备
+2. Greenplum数据库的详细安装步骤
 
 
-# 《Greenplum5-centos7安装指南》
+# Greenplum5-centos7安装指南
 
 ## 一、基础软件准备
 
   (1)下载RPM安装包
-     这里安装的GP版本为：5.5.21.2
+     这里安装的GP版本为：5.21.2
      greenplum-db-5.5.21.2-rhel6-x86_64.rpm
      下载地址：https://network.pivotal.io/products/pivotal-gpdb
 	 
@@ -25,14 +25,16 @@ tag: [Greenplum]
    
 ## 二、机器规划与准备工作
 
-   （1）机器规划（一个主节点，一个从节点，两个数据节点: root帐号的密码为：whistle）：
+ - （1）机器规划（一个主节点，一个从节点，两个数据节点: 三台机器的root帐号的密码均为：whistle）：
+ >
     节点类型     节点IP         节点hostname      节点描述
 	master    172.16.90.151     mdw              master 主节点
 	standby   172.16.90.152     smdw             standby 从节点
 	segment   172.16.90.153     sdw1             数据节点1
 	segment   172.16.90.154     sdw2             数据节点2
 	
-	（2）分别设置三台主机的hostname
+- （2）分别设置三台主机的hostname
+>
 	在master机器上：
 	hostnamectl --static set-hostname mdw
 	在standby机器上：
@@ -44,20 +46,22 @@ tag: [Greenplum]
 	
 	需要在/etc/hosts中设置节点的hostname(如上)，并能ping通。
 	
-	（3）关闭防火墙
+- （3）关闭防火墙
+>
 	systemctl stop firewalld
 	systemctl mask firewalld
 	systemctl stop iptables
 	systemctl disable iptables
 	
-   （4）每台主机上创建gpadmin用户与组
+- （4）每台主机上创建gpadmin用户与组
+>
 	groupdel gpadmin
 	userdel gpadmin
 	groupadd -g 530 gpadmin
 	useradd -g 530 -u 530 -m -d /home/gpadmin -s /bin/bash gpadmin
 	passwd gpadmin  注：后面均按照密码为gpadmin编写
 	
-	（5）创建节点配置信息
+-（5）创建节点配置信息
 	在master上创建文件all_hosts（所有主机名）和 all_segs（2台数据节点主机名）路径可以自选，这里用/home/gpadmin/nodes
 	文件内容：
 	文件/home/gpadmin/nodes/all_hosts:
@@ -71,54 +75,80 @@ tag: [Greenplum]
 		sdw2
 		
 ## 三、配置每台机器的内核参数
-   cp /etc/sysctl.conf /etc/sysctl.conf_bak
-   vim /etc/sysctl.conf
+>   vim /etc/sysctl.conf
 
---------------------------
+```
+
 kernel.shmmax = 500000000
+
 kernel.shmmni = 4096
+
 kernel.shmall = 4000000000
+
 kernel.sem = 500 1024000 200 4096
+
 kernel.sysrq = 1
+
 kernel.core_uses_pid = 1
+
 kernel.msgmnb = 65536
+
 kernel.msgmax = 65536
+
 kernel.msgmni = 2048
+
 net.ipv4.tcp_syncookies = 1
+
 net.ipv4.ip_forward = 0
+
 net.ipv4.conf.default.accept_source_route = 0
+
 net.ipv4.tcp_tw_recycle = 1
+
 net.ipv4.tcp_max_syn_backlog = 4096
+
 net.ipv4.conf.all.arp_filter = 1
+
 net.ipv4.ip_local_port_range = 10000 65535
+
 net.core.netdev_max_backlog = 10000
+
 net.core.rmem_max = 2097152
+
 net.core.wmem_max = 2097152
+
 vm.overcommit_memory = 2
---------------------------
+
+```
   
    执行如下使内核参数生效：
-   sysctl -p
+> sysctl -p
    
-四、配置每台机器的资源限制参数
+## 四、配置每台机器的资源限制参数
 
-	vim /etc/security/limits.conf
+> vim /etc/security/limits.conf
 
 设置文件/etc/security/limits.conf的内容如下：
--------------------
+
+```
+
 * soft nofile 65536
+
 * hard nofile 65536
+
 * soft nproc 131072
+
 * hard nproc 131072
-----------------------
+
+```
 
 ## 五、安装Greenplum
 
-1，准备greenplum数据库安装文件(master节点)
+### 1，准备greenplum数据库安装文件(master节点)
    路径：/home/greenplum/installer：
      greenplum-db-5.X.X-rhel7-x86_64.rpm
 
-2，安装软件(master节点)
+### 2，安装软件(master节点)
 
 （1）安装软件包
   cd /home/greenplum/installer/
@@ -138,7 +168,7 @@ vm.overcommit_memory = 2
   source /usr/local/greenplum-db/greenplum_path.sh
   gpssh-exkeys -f /home/gpadmin/nodes/all_hosts
   
----------------------------------------------------------
+```
 [root@mdw bin]# gpssh-exkeys -f /home/gpadmin/nodes/all_hosts
 [STEP 1 of 5] create local ID and authorize on local host
 
@@ -159,14 +189,14 @@ vm.overcommit_memory = 2
   ... finished key exchange with sdw2
 
 [INFO] completed successfully
----------------------------------------------------------
+```
   
  （5）运行gpseginstall工具
   cd /usr/local/greenplum-db/bin
   source /usr/local/greenplum-db/greenplum_path.sh
   gpseginstall -f /home/gpadmin/nodes/all_hosts -u gpadmin
   
----------------------------------------------------------
+```
 [root@mdw bin]# gpseginstall -f /home/gpadmin/nodes/all_hosts -u gpadmin
 20190902:16:51:00:019873 gpseginstall:mdw:root-[INFO]:-Installation Info:
 link_name greenplum-db
@@ -206,7 +236,7 @@ Confirm password: (这里输入：gpadmin)
 20190902:16:52:13:019873 gpseginstall:mdw:root-[INFO]:-remote command: . /usr/local/greenplum-db/./greenplum_path.sh; /usr/local/greenplum-db/./bin/gpssh --version
 20190902:16:52:14:019873 gpseginstall:mdw:root-[INFO]:-remote command: . /usr/local/greenplum-db-5.21.2/greenplum_path.sh; /usr/local/greenplum-db-5.21.2/bin/gpssh --version
 20190902:16:52:14:019873 gpseginstall:mdw:root-[INFO]:-SUCCESS -- Requested commands completed
------------------------------------------------------------
+```
 至此完成其他2台主机的安装
 
   （6）切换到gpadmin用户验证无密码登录
@@ -257,7 +287,7 @@ Confirm password: (这里输入：gpadmin)
    
 ## 六、初始化Greenplum数据库
 
-1. 初始化数据库
+### 1. 初始化数据库
 
 	(1)在master节点上切换至gpadmin帐号下：
 	su - gpadmin
@@ -278,8 +308,8 @@ Confirm password: (这里输入：gpadmin)
 	(5)增加master的从节点：
 	$ gpinitstandby -s smdw
 
-2, 访问数据库
-# psql -d postgres
+### 2, 访问数据库
+> psql -d postgres
 
 	psql (8.2.15)
 	Type "help" for help.
@@ -299,10 +329,10 @@ Confirm password: (这里输入：gpadmin)
 	
 	postgres=# \q（退出）
 
-3  用户创建密码
+### 3  用户创建密码
 	postgres =# alter role gpadmin with password 'gpadmin';
 	
-4，启动和停止数据库测试
+### 4，启动和停止数据库测试
 
  （1）启动
   $ gpstart
@@ -312,10 +342,10 @@ Confirm password: (这里输入：gpadmin)
   或者：强制停止
   gpstop -M fast
 	
-5 配置远程登录	
+### 5 配置远程登录	
   （1）pg_hba.conf配置文件 
      greenplum数据库底层封装的是 postgresql 数据库，与 pg 数据库一样，要想登录数据库，需先配置数据库白名单，即允许登录的数据库相关信息。配置文件为位于 MASTER 节点的数据目录之下的 pg_hba.conf 文件。
-     vim $MASTER_DATA_DIRECTORY/pg_hba.conf
+>     vim $MASTER_DATA_DIRECTORY/pg_hba.conf
   
 	该文件的记录有5个字段，代表的意义为：
 	1、连接方式
@@ -330,15 +360,6 @@ Confirm password: (这里输入：gpadmin)
   （2）postgresql.conf配置文件 
      将配置文件postgresql.conf的listen_addresses修改为监听所有,也就是listen_addresses = '*'
 
-6 建议
+### 6 建议
   （1）在master节点上通过crontab设置定期清理pg的日志
    */10 * * * * (rm -f /home/gpadmin/data/master/gpseg-1/pg_log/gpdb-*.csv)
-	 
-7 FAQ
-	（1）20190902:15:18:30:014016 gpstart:mdw:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1529)
-只能配置segment节点，用作磁盘读写的内存缓冲区,开始可以设置一个较小的值，比如总内存的15%，然后逐渐增加，过程中监控性能提升和swap的情况。以上的缓冲区的参数为125MB，此值不易设置过大，过大或导致错误。
-gpconfig -c shared_buffers -v "125MB"
-	(2) 常见问题FAQ
-https://blog.csdn.net/q936889811/article/details/85612046
-http://www.360doc.com/content/19/0430/17/37882969_832566583.shtml
-
