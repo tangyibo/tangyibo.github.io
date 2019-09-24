@@ -1,16 +1,17 @@
 ---
 layout: post
-title:Greenplum|Greenplum
+title:Greenplum安装教程|Greenplum数据库
 category: Greenplum
 tag: [Greenplum]
 ---
 
 这篇文章主要介绍Greenplum分布式版本管理与集中式管理的一些差异，总结下Greenplum常用命令作为日后的速查表，最后介绍Git进阶的一些案例。
 本文分为以下几个部分：
-1. Greenplum差异
+1. Greenplum的安装准备
+2. Greenplum的安装步骤
 
 
-#《Greenplum5-centos7安装指南》
+# 《Greenplum5-centos7安装指南》
 
 ## 一、基础软件准备
 
