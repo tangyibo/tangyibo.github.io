@@ -1,6 +1,6 @@
 ---
 layout: post
-title:Greenplum安装教程|Greenplum数据库
+title: Greenplum安装教程|Greenplum数据库
 category: Greenplum
 tag: [Greenplum]
 ---
