@@ -20,7 +20,7 @@ tag: [oracle]
  yum install docker
  systemctl start docker
 ```
-###2 、拉取 docker 镜像（镜像6.8G）
+### 2 、拉取 docker 镜像（镜像6.8G）
 ```
  docker pull registry.cn-hangzhou.aliyuncs.com/helowin/oracle_11g
 ```
