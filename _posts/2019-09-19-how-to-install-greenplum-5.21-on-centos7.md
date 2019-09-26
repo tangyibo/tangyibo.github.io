@@ -335,19 +335,19 @@ Confirm password: (这里输入：gpadmin)
 ### 4，启动和停止数据库测试
 
  （1）启动
-  $ gpstart
+  > gpstart
   
  （2）停止 
-  $ gpstop
+  > gpstop
   或者：强制停止
-  gpstop -M fast
+  >gpstop -M fast
 
 	
   (3)删除原有的standby
-   gpinitstandby -r
+   >gpinitstandby -r
 
   (4)启动和同步standby数据
-   gpinitstandby -n
+   >gpinitstandby -n
 
 ### 5 配置远程登录	
   （1）pg_hba.conf配置文件 
