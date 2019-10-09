@@ -335,13 +335,20 @@ Confirm password: (这里输入：gpadmin)
 ### 4，启动和停止数据库测试
 
  （1）启动
-  $ gpstart
+  > gpstart
   
  （2）停止 
-  $ gpstop
+  > gpstop
   或者：强制停止
-  gpstop -M fast
+  >gpstop -M fast
+
 	
+  (3)删除原有的standby
+   >gpinitstandby -r
+
+  (4)启动和同步standby数据
+   >gpinitstandby -n
+
 ### 5 配置远程登录	
   （1）pg_hba.conf配置文件 
      greenplum数据库底层封装的是 postgresql 数据库，与 pg 数据库一样，要想登录数据库，需先配置数据库白名单，即允许登录的数据库相关信息。配置文件为位于 MASTER 节点的数据目录之下的 pg_hba.conf 文件。
