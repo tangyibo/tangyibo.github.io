@@ -1,20 +1,20 @@
 ---
 layout: post
 title:greenplum的存储格式|greenplum数据库 
-category: MySQL
-tag: [MySQL]
+category: Greenplum
+tag: [Greenplum]
 ---
 
 这篇文章主要记录了Greenplum数据库的数据存储格式相关。
 本文分为以下几个部分：
 1. 存储格式介绍
-1. Heap表
-1. AO表
+2. Heap表
+3. AO表
 
 
 ## Greenplum数据库的数据存储格式
 
-###存储格式介绍
+### 存储格式介绍
 
 Greenplum（以下简称GP）有2种存储格式，Heap表和AO表（AORO表，AOCO表）。
 
