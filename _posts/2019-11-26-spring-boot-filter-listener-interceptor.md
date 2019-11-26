@@ -1,11 +1,11 @@
 ---
 layout: post
-title:springboot配置监听器、过滤器和拦截器 
+title: SpringBoot配置监听器、过滤器和拦截器|SpringBoot框架
 category: springboot
 tag: [springboot]
 ---
 
-这篇文章主要记录了springboot配置监听器、过滤器和拦截器 。
+这篇文章主要记录了SpringBoot配置监听器、过滤器和拦截器 。
 本文分为以下几个部分：
 1. 监听器
 2. 过滤器

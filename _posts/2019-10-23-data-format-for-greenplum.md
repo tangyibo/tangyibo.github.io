@@ -1,6 +1,6 @@
 ---
 layout: post
-title:greenplum的存储格式|greenplum数据库 
+title: Greenplum的存储格式|Greenplum数据库 
 category: Greenplum
 tag: [Greenplum]
 ---
