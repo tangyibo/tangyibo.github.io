@@ -28,6 +28,16 @@ Interceptor 在AOP（Aspect-Oriented Programming）中用于在某个方法或�
 
 ![structure](https://github.com/tangyibo/tangyibo.github.io/blob/master/_posts/imgs/03c84353cbcfc57dddf7714cba62cfed662.jpg?raw=true)
 
+## 过滤器、拦截器、切片拦截请求的对比
+
+### 相同点： 
+- 都可以对请求进行拦截。
+
+### 不同点：
+- 过滤器对请求的拦截只能获取到原始的Request 和 Response 的信息。
+- 拦截器对请求的拦截可以获取原始的Request、Response和所有的controller及方法名，但无法获取方法的参数信息。
+- Aspect切片只能获取方法的参数，原始的Request、Response不能获取。
+
 ### 参考地址
 - https://www.cnblogs.com/hhhshct/p/8808115.html
 - https://www.cnblogs.com/feng9exe/p/11217340.html
