@@ -61,6 +61,41 @@ tag: [SpringBoot]
 
 - 5.mybatis配置文件：resources/mapper/config/（mybatis项目）
 
-### 4.参考地址
+### 三.entity、model、domain的不同：
+
+- 1.entity,处于业务层，字段必须和数据库字段一样；
+
+- 2.model前端需要什么我们就给什么，是为页面提供数据和数据校验的； 
+
+- 3.domain很少用，国外很多项目经常用到, 代表一个对象模块
+
+### 四、常用分层整理
+
+- 1、entity层
+
+同类： model层 = entity层 = domain层
+
+作用： 用于存放我们的实体类，与数据库中的属性值基本保持一致。
+
+- 2、mapper层
+
+同类： mapper层 = dao层
+
+作用： 对数据库进行数据持久化操作，他的方法语句是直接针对数据库操作的
+
+- 3、service层
+
+同类： 只有一个 service层
+
+作用： service层 是针对 controller层的 controller，也就是针对我们使用者。service的 impl 是把mapper和service进行整合的文件。
+
+- 4、controller层
+
+同类： controller层 = web 层
+
+作用： 控制器，导入service层，因为service中的方法是我们使用到的，controller通过接收前端传过来的参数进行业务操作，再将处理结果返回到前端。
+
+### 五.参考地址
 
 地址：https://blog.csdn.net/Auntvt/article/details/80381756
+
