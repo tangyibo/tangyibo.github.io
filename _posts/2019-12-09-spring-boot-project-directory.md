@@ -47,7 +47,7 @@ tag: [SpringBoot]
 
 根目录:src/main/resources
 
-- 1.项目配置文件：resources/application.yml
+- 1.项目配置文件：resources/application.yml 或者 resources/application.properties
 
 - 2.静态资源目录：resources/static/
 
