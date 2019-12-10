@@ -370,3 +370,9 @@ Confirm password: (这里输入：gpadmin)
 ### 6 建议
   （1）在master节点上通过crontab设置定期清理pg的日志
    */10 * * * * (rm -f /home/gpadmin/data/master/gpseg-1/pg_log/gpdb-*.csv)
+
+### 7 命令记录
+ 根据进程名批量kill进程：
+```
+ps -ef | grep postgres | grep -v grep | awk '{print $2}' | xargs kill -9
+```
