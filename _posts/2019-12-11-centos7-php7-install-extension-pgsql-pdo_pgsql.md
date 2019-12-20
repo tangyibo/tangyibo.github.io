@@ -17,11 +17,10 @@ tag: [php]
 
 ## 一、下载PHP7源代码
 
-···
+```
 wget https://www.php.net/distributions/php-7.2.25.tar.gz
 tar zxvf php-7.2.25.tar.gz
-cd 
-···
+```
 
 ## 二、安装PG的开发包
 
@@ -34,7 +33,7 @@ yum install postgresql-devel
 ## 三、编译pgsql扩展
 
 ```
-php-7.2.25/ext/pgsql/
+cd php-7.2.25/ext/pgsql/
 /usr/local/bin/phpize
 ./configure --with-php-config=/usr/local/whistle/php/bin/php-config
 make
