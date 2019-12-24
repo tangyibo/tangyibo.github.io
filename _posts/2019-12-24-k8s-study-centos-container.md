@@ -17,6 +17,8 @@ k8s是一个完备的分布式系统支持平台，k8s具有完备的集群管�
 
 # 2. kubernetes安装参考
 
-地址： https://cloud.tencent.com/developer/article/1501418
+[1] 地址： https://cloud.tencent.com/developer/article/1501418
+
+[2] 地址： https://www.jianshu.com/p/d1536416c2b0
 
 
