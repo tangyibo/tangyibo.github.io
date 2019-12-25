@@ -146,3 +146,30 @@ WHERE
 SELECT * from "stu" LIMIT 1 OFFSET 0
 ```
 
+## 5、自增字段问题
+
+- MySQL数据库的自增字段
+
+（1）在建表时，对于整型字段，可以使用AUTO_INCREMENT关键词配置为自增字段；
+
+（2）MySQL数据库中的一个表最多有一个自增的字段
+
+- Oracle数据库的自增字段
+
+与PostgreSQL类似.
+
+- PostgreSQL数据库的自增字段
+
+（1）创建表时，如果使用serial类型，默认生成的自增序列名为：'表名' + '_' + '字段名' + '_' + 'seq'；
+
+（2）可以单纯创建序列，在建表语句中自增的字段指定使用的序列名称。示例如下：
+
+```
+CREATE SEQUENCE gys.mytable_myid_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 99999999
+    CACHE 1;
+```
+ 
