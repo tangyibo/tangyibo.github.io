@@ -43,3 +43,7 @@ gpconfig只能在系统启动的情况下调用，所以如果参数修改不合
 - 2、gpstart -m 仅启动master进入管理模式
 - 3、gpconfig -r  <参数>   -- 把参数重置成默认值
 - 4、gpstop -a -r -M fast
+
+# 3.参考地址
+
+【1】. https://yq.aliyun.com/articles/145445
