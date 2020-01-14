@@ -66,8 +66,158 @@ class MyThread extends Thread{
 
 # 3.Java的线程池
 
+Java中创建线程池有以下的方式，
 
+（1）使用ThreadPoolExecutor类
 
+（2）使用Executors类
+
+其实这两种方式在本质上是一种方式，都是通过ThreadPoolExecutor类的方式。
+
+## 4.1 使用Executors类
+
+使用方法：
+```
+ExecutorService pool = Executors.newFixedThreadPool(int nThreads);
+pool.submit(new TestXThread());
+```
+
+或者:
+```
+ExecutorService pool = Executors.newFixedThreadPool(int nThreads, ThreadFactory threadFactory);
+这里的ThreadFactory接口定义如下
+public interface ThreadFactory {
+    Thread newThread(Runnable r);
+}
+```
+
+示例如下：
+```
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class TestXThread implements Runnable {
+
+	@Override
+	public void run() {
+		// do something
+	}
+	
+}
+
+public class ThreadPool01 {
+
+	public static void main(String[] args) {
+		ExecutorService pool = Executors.newFixedThreadPool(4);
+		 for (int i = 0; i < 4; i++) {
+	            pool.submit(new TestXThread());
+	        }
+		 
+		 pool.shutdown();
+		while (!pool.isTerminated()) {
+			try {
+				Thread.sleep(50);
+			} catch (Exception e) {
+			}
+		}
+
+	}
+
+}
+```
+
+## 4.2 使用ThreadPoolExecutor类
+
+示例代码如下：
+```
+package cn.weishao.test;
+
+import java.io.IOException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class ThreadPool02 {
+
+	public static void main(String[] args) throws InterruptedException, IOException {
+		int corePoolSize = 2;
+		int maximumPoolSize = 4;
+		long keepAliveTime = 10;
+		TimeUnit unit = TimeUnit.SECONDS;
+		BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(2);
+		ThreadFactory threadFactory = new NameTreadFactory();
+		RejectedExecutionHandler handler = new MyIgnorePolicy();
+		
+		ThreadPoolExecutor executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit,
+				workQueue, threadFactory, handler);
+		executor.prestartAllCoreThreads(); // 预启动所有核心线程
+
+		for (int i = 1; i <= 10; i++) {
+			MyTask task = new MyTask(String.valueOf(i));
+			executor.execute(task);
+		}
+
+		System.in.read(); // 阻塞主线程
+	}
+
+	static class NameTreadFactory implements ThreadFactory {
+
+		private final AtomicInteger mThreadNum = new AtomicInteger(1);
+
+		@Override
+		public Thread newThread(Runnable r) {
+			Thread t = new Thread(r, "my-thread-" + mThreadNum.getAndIncrement());
+			System.out.println(t.getName() + " has been created");
+			return t;
+		}
+	}
+
+	public static class MyIgnorePolicy implements RejectedExecutionHandler {
+
+		public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+			doLog(r, e);
+		}
+
+		private void doLog(Runnable r, ThreadPoolExecutor e) {
+			// 可做日志记录等
+			System.err.println(r.toString() + " rejected");
+			// System.out.println("completedTaskCount: " + e.getCompletedTaskCount());
+		}
+	}
+
+	static class MyTask implements Runnable {
+		private String name;
+
+		public MyTask(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public void run() {
+			try {
+				System.out.println(this.toString() + " is running!");
+				Thread.sleep(3000); // 让任务执行慢点
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String toString() {
+			return "MyTask [name=" + name + "]";
+		}
+	}
+}
+
+```
 
 # 4.Java的多线程同步
 
