@@ -128,7 +128,7 @@ public class ThreadPool01 {
 
 ## 4.2 使用ThreadPoolExecutor类
 
-示例代码如下：
+示例代码如下：（参考地址：https://www.jianshu.com/p/f030aa5d7a28 ）
 ```
 package cn.weishao.test;
 
@@ -566,11 +566,124 @@ public interface ReadWriteLock {
 
 # 5.Java的线程间通信
 
-### synchronized加Object类的wait/notify方式
+### [共享内存]synchronized加Object类的wait/notify方式
 
-### ReentrantLock加条件变量Condition方式
+在多线程运行中，有时候某个线程依赖于其他线程的运行结果，这样就需要被依赖的线程去通知依赖线程，那么就会使用线程的等待和唤醒。所使用的Object类的方法：
 
-### 管道通信PipedOutputStream/PipedInputStream
+- wait():等待，将正在执行的线程释放其执行资格 和 执行权，并存储到线程池中
+
+- notify():唤醒，唤醒线程池中被wait()的线程，一次唤醒一个，而且是任意的
+
+- notifyAll():唤醒全部线程，将线程池中的所有等待线程唤醒
+
+使用示例如下：
+```
+
+class SharedData{
+	public String name=null;
+	public boolean flag=false;
+}
+
+class InputSharedData implements Runnable{
+
+	private SharedData data;
+	
+	public InputSharedData(SharedData data) {
+		this.data=data;
+	}
+	
+	@Override
+	public void run() {
+		int index=1;
+		while(true) {
+			//等待this.data.flag为false是代表Output线程处理完
+			synchronized(this.data) {
+				if(true==this.data.flag) {
+					try {
+						this.data.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				StringBuilder sb=new StringBuilder();
+				for(int i=0;i<index;++i) {
+					sb.append("a");
+				}
+				index++;
+				
+				this.data.name=sb.toString();
+				this.data.flag=true;
+				
+				this.data.notify();
+			}
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}
+
+class OutputSharedData implements Runnable{
+
+	private SharedData data;
+	
+	public OutputSharedData(SharedData data) {
+		this.data=data;
+	}
+	
+	@Override
+	public void run() {
+		while(true) {
+			//等待this.data.flag为true是代表Input线程写入完
+			synchronized(this.data) {
+				if(false==this.data.flag) {
+					try {
+						this.data.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				System.out.println("data:"+this.data.name);
+				this.data.flag=false;
+				this.data.notify();
+			}
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+}
+
+public class ThreadCommunicate02 {
+
+	public static void main(String[] args) {
+		SharedData d=new SharedData();
+		InputSharedData input=new InputSharedData(d);
+		OutputSharedData output=new OutputSharedData(d);
+		
+		new Thread(input).start();
+		new Thread(output).start();
+	}
+
+}
+```
+
+### [条件变量condition]ReentrantLock加条件变量Condition方式
+
+### [信号量semaphore]
+
+### [管道通信pipe]使用PipedOutputStream/PipedInputStream
 
 管道流主要用来实现两个线程之间的二进制数据的传播，下面以PipedInputStream类和PipedOutputStream类为例，实现生产者-消费者：
 
