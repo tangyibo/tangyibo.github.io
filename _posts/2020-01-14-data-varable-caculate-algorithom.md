@@ -212,12 +212,13 @@ CREATE TABLE `stu_diff` (
 				int compare = this.compare(one, two, keyNumbers, metaData);//比较主键自动
 				if (0 == compare) { // 如果新旧两个表记录的主键值相等
                        //比较除主键外的其他字段
-					int compareValues = this.compare(one, two, valNumbers, metaData);				          	if (compareValues == 0) { //如果主键外的其他字段值都相同说明记录没变
+					int compareValues = this.compare(one, two, valNumbers, metaData);
+					if (compareValues == 0) { //如果主键外的其他字段值都相同说明记录没变
 						flagField = VALUE_IDENTICAL;  //记录数据记录没变标记
 						outputRow = one;           //记录没变的数据内容
 					} else {           //到这里说明数据更新了
 						flagField = VALUE_UPDATE; //记录数据记录被更新
-outputRow = two;         //记录更新后数据内容	
+						outputRow = two;         //记录更新后数据内容	
 					}
  
 					// Get a new row from both streams...
@@ -247,7 +248,7 @@ outputRow = two;         //记录更新后数据内容
 # 五、几句尾话
 上述全量算变化量的方法，本人已经编写了一个完整的DEMO程序，支持多主键的情况，下一步有时间会考虑封装为一个模块来。希望给个star哦。多谢了！
 
-项目地址：https://gitee.com/inrgihc/mergerow  或 https://gitee.com/tangyibo/mergerow
+项目地址：https://gitee.com/inrgihc/mergerow  或 https://github.com/tangyibo/mergerow
 
 原文链接：https://blog.csdn.net/inrgihc/article/details/103932231
 
