@@ -566,6 +566,11 @@ public interface ReadWriteLock {
 
 # 5.Java的线程间通信
 
+线程间通信的方式包括：共享内存、条件变量condition、信号量semaphore、管道通信pipe等；
+
+示例参考地址：https://my.oschina.net/u/3272058/blog/3068524
+
+
 ### [共享内存]synchronized加Object类的wait/notify方式
 
 在多线程运行中，有时候某个线程依赖于其他线程的运行结果，这样就需要被依赖的线程去通知依赖线程，那么就会使用线程的等待和唤醒。所使用的Object类的方法：
@@ -681,7 +686,35 @@ public class ThreadCommunicate02 {
 
 ### [条件变量condition]ReentrantLock加条件变量Condition方式
 
+(略)
+
 ### [信号量semaphore]
+
+ Semaphore是一种基于计数的信号量。它可以设定一个阈值，基于此，多个线程竞争获取许可信号，做完自己的申请后归还，超过阈值后，线程申请许可信号将会被阻塞。Semaphore可以用来构建一些对象池，资源池之类的，比如数据库连接池，我们也可以创建计数为1的Semaphore，将其作为一种类似互斥锁的机制，这也叫二元信号量，表示两种互斥状态。
+
+使用方法如下：
+```
+		// 创建一个计数阈值为5的信号量对象
+		// 只能5个线程同时访问
+		Semaphore semp = new Semaphore(5);
+ 
+		try {
+			// 申请许可
+			semp.acquire();
+			try {
+				// 业务逻辑
+			} catch (Exception e) {
+ 
+			} finally {
+				// 释放许可
+				semp.release();
+			}
+		} catch (InterruptedException e) {
+ 
+		}
+```
+
+Semaphore是由公平性和非公平性两种实现模式，对应Sync的两个实现类FairSync和NonfairSync。**Semaphore的默认实现是非公平性**。
 
 ### [管道通信pipe]使用PipedOutputStream/PipedInputStream
 
