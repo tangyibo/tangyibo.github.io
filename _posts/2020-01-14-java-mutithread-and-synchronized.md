@@ -64,7 +64,12 @@ class MyThread extends Thread{
 ```
 使用继承 Thread 类创建线程，最大的局限就是不能多继承，所以为了支持多继承，完全可以实现 Runnable 接口的方式。
 
-# 2.Java的多线程同步
+# 3.Java的线程池
+
+
+
+
+# 4.Java的多线程同步
 
 Java之多线程同步方法：
 
@@ -72,7 +77,7 @@ Java之多线程同步方法：
 
 （2）Lock            接口类
 
-## 2.1 synchronized关键字实现线程同步
+## 4.1 synchronized关键字实现线程同步
 
 ### （1）synchronized关键词修饰同步代码块
 
@@ -230,9 +235,9 @@ Synchronized进过编译，会在同步块的前后分别形成monitorenter和mo
 
 在执行monitorenter指令时，首先要尝试获取对象锁。如果这个对象没被锁定，或者当前线程已经拥有了那个对象锁，把锁的计算器加1，相应的，在执行monitorexit指令时会将锁计算器就减1，当计算器为0时，锁就被释放了。如果获取对象锁失败，那当前线程就要阻塞，直到对象锁被另一个线程释放为止。
 
-## 2.2 Lock接口类实现线程同步
+## 4.2 Lock接口类实现线程同步
 
-## 2.2.1 Lock接口
+## 4.2.1 Lock接口
 
 （1）Lock接口定义
 
@@ -373,14 +378,15 @@ public class BasicTest06 {
 }
 ```
 
-
-
 - ReadLock类
 
+ （略）
+ 
 - WriteLock类
 
+ （略）
 
-## 2.2.2 ReadWriteLock接口
+## 4.2.2 ReadWriteLock接口
 
 （1）ReadWriteLock接口定义
 
@@ -406,8 +412,9 @@ public interface ReadWriteLock {
 
 - ReentrantReadWriteLock类
 
+示例请参考地址：https://www.iteye.com/blog/cuisuqiang-1458806
 
-# 3.Java的线程间通信
+# 5.Java的线程间通信
 
 ### synchronized加Object类的wait/notify方式
 
