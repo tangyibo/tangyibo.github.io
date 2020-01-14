@@ -687,7 +687,7 @@ public class ThreadCommunicate02 {
 
 ### [条件变量condition]ReentrantLock加条件变量Condition方式
 
-(略)
+示例参考地址：https://www.cnblogs.com/superfj/p/7543927.html
 
 ### [信号量semaphore]
 
