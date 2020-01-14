@@ -27,19 +27,20 @@ Java虚拟机栈和程序计数器一样是线程私有的，他的生命周期�
 局部变量表就是储存的基本数据类型(\boolean,byte,char,short,int,float,long,double),对象引用等等，long和double会占用2个局部变量的空间，其余的数据类型都只占用1个，方法运行期间局部变量表的大小固定
 Java 虚拟机栈规定了两种异常，线程请求栈的深度大于当前虚拟机所允许的深度，会抛出StackOverflowError异常（比如递归的时候）还有就是当虚拟机栈扩展时无法申请到足够的内存会有OutOfMemoryError异常。
 
-## 1.3.本地方法栈
+## 1.3.本地方法区
 
 本地方法栈和Java虚拟机栈所发挥的作用非常相似，他们之间的区别就是Java虚拟机栈执行的Java方法，本地方法栈执行的是native方法，本地方法栈和Java虚拟机栈一样都会有StackOverflowError和OutOfMemoryError异常
 
 ## 1.4.Java堆
 
 - Java堆是虚拟机内存中最大的一块，他是线程共享的，唯一的作用就是存放对象的实例，几乎所有的对象实例都在堆里面分配内存，
-- Java 堆是垃圾收集器管理的主要区域，
 - Java 堆可以细分为：新生代和老年代，再详细就分为：Eden（伊甸园）空间，From Survivor和To Survivor（幸存者）空间等，这样分配主要目的是为了更好地回收内存，内存图所示：
 
 ![structure](https://github.com/tangyibo/tangyibo.github.io/blob/master/_posts/imgs/heap_meory.png?raw=true)
 
 - Java堆可以处于物理上不连续的空间，只要逻辑上连续即可，Java堆可以通过-Xmx和-Xms来控制大小当堆没有内存完成实例分配的时候，会抛出OutOfMemoryError异常
+
+- Java 堆是垃圾收集器管理的主要区域
 
 ## 1.5.方法区
 
