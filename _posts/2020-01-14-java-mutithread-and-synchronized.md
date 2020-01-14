@@ -224,6 +224,12 @@ public class BasickTest05 {
 
 （3）另外通过Lock可以知道线程有没有成功获取到锁，这个是synchronized无法办到的。
 
+**synchronized同步的原理:**
+
+Synchronized进过编译，会在同步块的前后分别形成monitorenter和monitorexit这个两个字节码指令。
+
+在执行monitorenter指令时，首先要尝试获取对象锁。如果这个对象没被锁定，或者当前线程已经拥有了那个对象锁，把锁的计算器加1，相应的，在执行monitorexit指令时会将锁计算器就减1，当计算器为0时，锁就被释放了。如果获取对象锁失败，那当前线程就要阻塞，直到对象锁被另一个线程释放为止。
+
 ## 2.2 Lock接口类实现线程同步
 
 ## 2.2.1 Lock接口
@@ -277,6 +283,98 @@ reentrant	英[riːˈɛntrənt] 美[ˌriˈɛntrənt]
 
 - ReentrantLock类
 
+使用方法：
+```
+ Lock lock=new ReentrantLock();
+ 
+ lock.lock();
+ try {
+ 	//do something
+ } finally {
+ 	lock.unlock();
+ }
+```
+
+ReenTrantLock的实现是一种自旋锁，通过循环**调用CAS操作来实现加锁**。它的性能比较好也是因为避免了使线程进入内核态的阻塞状态。
+
+深入分析参考：http://www.blogjava.net/zhanglongsr/articles/356782.html
+
+使用示例如下：
+```
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+class TicketConsumer3  implements Runnable{
+	
+	private int ticket;
+	private Lock lock;
+	
+	public TicketConsumer3(int t) {
+		this.ticket=t;
+		lock=new ReentrantLock();
+	}
+
+	private boolean sale() {
+		lock.lock();
+
+		try {
+			if (ticket > 0) {
+				System.out.println("thread " + Thread.currentThread().getName() + " left ticket:" + ticket);
+				ticket--;
+				return true;
+			}
+
+			return false;
+		} finally {
+			lock.unlock();
+		}
+
+	}
+	
+	@Override
+	public void run() {
+			while (true) {
+				if(!this.sale()) {
+					break;
+				}
+				
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+	}
+	
+}
+
+
+public class BasicTest06 {
+
+	public static void main(String[] args) throws InterruptedException {
+		Runnable runable=new TicketConsumer3(10);
+		Thread t1=new Thread(runable);
+		Thread t2=new Thread(runable);
+		Thread t3=new Thread(runable);
+		
+		t1.start();
+		t2.start();
+		t3.start();
+		
+		t1.join();
+		t2.join();
+		t3.join();
+		
+		System.out.println("main thread over!");
+
+	}
+
+}
+```
+
+
+
 - ReadLock类
 
 - WriteLock类
@@ -311,6 +409,91 @@ public interface ReadWriteLock {
 
 # 3.Java的线程间通信
 
+### synchronized加Object类的wait/notify方式
 
+### ReentrantLock加条件变量Condition方式
 
+### 管道通信PipedOutputStream/PipedInputStream
 
+管道流主要用来实现两个线程之间的二进制数据的传播，下面以PipedInputStream类和PipedOutputStream类为例，实现生产者-消费者：
+
+```
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+
+class MyProducer extends Thread {
+	private PipedOutputStream outputStream;
+
+	public MyProducer(PipedOutputStream outputStream) {
+		this.outputStream = outputStream;
+	}
+
+	@Override
+	public void run() {
+		int index = 0;
+		
+		while (true) {
+			try {
+				for (int i = 0; i < 5; i++) {
+					outputStream.write(index++);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+class MyConsumer extends Thread {
+
+	private PipedInputStream inputStream;
+
+	public MyConsumer(PipedInputStream inputStream) {
+		this.inputStream = inputStream;
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			try {
+				int count = inputStream.available();
+				if (count > 0) {
+					System.out.println("rest product count: " + count);
+					System.out.println("get product: " + inputStream.read());
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+}
+
+public class ThreadCommunicate01 {
+
+	public static void main(String[] args) {
+		PipedOutputStream pos = new PipedOutputStream();
+		PipedInputStream pis = new PipedInputStream();
+		try {
+			pis.connect(pos);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		new MyProducer(pos).start();
+		new MyConsumer(pis).start();
+	}
+
+}
+```
