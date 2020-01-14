@@ -52,7 +52,7 @@ Java 虚拟机栈规定了两种异常，线程请求栈的深度大于当前虚
 
 java的堆内存主要被分为三块，新生代、老年代、持久代。三代的特点不同，造就了他们所用的GC算法不同，新生代适合那些生命周期较短，频繁创建及销毁的对象，旧生代适合生命周期相对较长的对象，持久代在Sun HotSpot中就是指方法区（有些JVM中根本就没有持久代这中说法）。首先介绍下新生代、旧生代、持久代的概念及特点：
 - 新生代：New Generation或者Young Generation。上面大致分为Eden区和Survivor区，Survivor区又分为大小相同的两部分：From和To。新建的对象都是用新生代分配内存，Eden空间不足的时候，会把存活的对象转移到Survivor中，新生代的大小可以由-Xmn来控制，也可以用-XX:SurvivorRatio来控制Eden和Survivor的比例.
-- 老年代：Old Generation。用于存放新生代中经过多次垃圾回收仍然存活的对象，例如缓存对象。旧生代占用大小为-Xmx值减去-Xmn对应的值。
+- 老年代：Old Generation。用于存放新生代中经过多次垃圾回收仍然存活的对象，例如缓存对象。老年代占用大小为-Xmx值减去-Xmn对应的值。
 - 持久代：Permanent Generation。在Sun的JVM中就是方法区的意思，尽管有些JVM大多没有这一代。主要存放常量及类的一些信息默认最小值为16MB，最大值为64MB，可通过-XX:PermSize及-XX:MaxPermSize来设置最小值和最大值。
 
 ## 2.1 垃圾回收机制中的算法
@@ -184,22 +184,176 @@ Java 中可作为 GC Root 的对象：
 
 ![structure](https://github.com/tangyibo/tangyibo.github.io/blob/master/_posts/imgs/vm_a_4.png?raw=true)
 
-- 1 Serial 收集器（复制算法)
-新生代单线程收集器，标记和清理都是单线程，优点是简单高效。
+上面有7中收集器，分为两块，上面为新生代收集器，下面是老年代收集器。如果两个收集器之间存在连线，就说明它们可以搭配使用。这7个收集器大致可分为两大类
 
-- 2 Serial Old收集器(标记-整理算法)
-老年代单线程收集器，Serial 收集器的老年代版本。
+#### 1、串行收集器
 
-- 3 ParNew 收集器(停止-复制算法) 　
-新生代收集器，可以认为是 Serial 收集器的多线程版本，在多核 CPU 环境下有着比 Serial 更好的表现。
+使用单线程进行垃圾回收的收集器，每次回收时，串行收集器只有一个工作线程，对于并行能力较弱的计算机来说，串行收集器的专注性和独占性往往有更好的性能表现。串行收集器可以在新生代和老年代中使用，根据作用于不同的堆空间，分为新生代串行收集器和老年代收集器。
 
-- 4 Parallel Scavenge 收集器(停止-复制算法)
-并行收集器，追求高吞吐量，高效利用 CPU。吞吐量一般为 99%， 吞吐量 = 用户线程时间 / (用户线程时间 + GC线程时间)。适合后台应用等对交互相应要求不高的场景。
+```
+使用配置如下：
 
-- 5 Parallel Old 收集器(停止-复制算法)
-Parallel Scavenge 收集器的老年代版本，并行收集器，吞吐量优先。
+-XX:+UseSerialGC :年轻串行（Serial），老年串行（Serial Old）
+```
 
-- 6 CMS(Concurrent Mark Sweep) 收集器（标记-清理算法）
-高并发、低停顿，追求最短 GC 回收停顿时间，cpu 占用比较高，响应时间快，停顿时间短，多核 cpu 追求高响应时间的选择。
+- Serial收集器：
 
+Serial收集器是一个新生代收集器，单线程执行，使用复制算法。它在进行垃圾收集时，必须暂停其他所有的工作线程(用户线程)。是Jvm client模式下默认的新生代收集器。对于限定单个CPU的环境来说，Serial收集器由于没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程收集效率。
 
+![structure](https://github.com/tangyibo/tangyibo.github.io/blob/master/_posts/imgs/gc_1.png?raw=true)
+
+- Serial Old收集器
+
+1、Serial收集器的老年代版本，它同样是一个单线程收集器，使用“标记-整理”算法。
+
+2、主要意义也是在于给Client模式下的虚拟机使用。
+
+3、如果在Server模式下，那么它主要还有两大用途：
+
+一种用途是在JDK 1.5以及之前的版本中与Parallel Scavenge收集器搭配使用，另一种用途就是作为CMS收集器的后备预案，在并发收集发生Concurrent Mode Failure时使用。
+
+![structure](https://github.com/tangyibo/tangyibo.github.io/blob/master/_posts/imgs/gc_2.png?raw=true)
+
+#### 2、并行收集器
+
+- ParNew收集器
+
+1、Serial收集器的多线程版本
+
+2、单CPU不如Serial，因为存在线程交互的开销
+
+```
+使用：
+-XX:+UseParNewGC 新生代并行（ParNew），老年代串行（Serial Old）
+
+-XX:ParallelGCThreads=n 设置并行收集器收集时使用的CPU数。并行收集线程数。一般最好和计算机的CPU相当
+```
+
+![structure](https://github.com/tangyibo/tangyibo.github.io/blob/master/_posts/imgs/gc_3.png?raw=true)
+
+-  Parallel Scavenge收集器
+
+```
+使用：
+-XX:+UseParallelGC 
+```
+
+新生代使用并行回收收集器，老年代使用串行收集器
+
+1、吞吐量优先”收集器
+
+2、新生代收集器，复制算法，并行的多线程收集器
+
+3、目标是达到一个可控制的吞吐量（Throughput）。
+
+4、吞吐量=运行用户代码时间/（运行用户代码时间+垃圾收集时间），虚拟机总共运行了100分钟，其中垃圾收集花掉1分钟，那吞吐量就是99%。
+
+5、两个参数用于精确控制吞吐量:
+
+```
+使用：
+-XX：MaxGCPauseMillis 是控制最大垃圾收集停顿时间
+
+-XX：GCTimeRatio 直接设置吞吐量大小
+
+-XX：+UseAdaptiveSizePolicy 动态设置新生代大小、Eden与Survivor区的比例、晋升老年代对象年龄
+```
+
+6、并行（Parallel）：指多条垃圾收集线程并行工作，但此时用户线程仍然处于等待状态。
+
+7、并发（Concurrent）：指用户线程与垃圾收集线程同时执行（但不一定是并行的，可能会交替执行），用户程序在继续运行，而垃圾收集程序运行于另一个CPU上。
+
+- Parallel Old收集器
+
+```
+使用：
+-XX:+UseParallelOldGC 
+```
+
+新生代和老年代都使用并行回收收集器
+
+1、Parallel Scavenge收集器的老年代版本，使用多线程和“标记-整理”算法。
+
+2、在注重吞吐量以及CPU资源敏感的场合，都可以优先考虑Parallel Scavenge加Parallel Old收集器。
+
+![structure](https://github.com/tangyibo/tangyibo.github.io/blob/master/_posts/imgs/gc_4.png?raw=true)
+
+- CMS收集器
+
+1、以获取最短回收停顿时间为目标的收集器。
+
+2、非常符合互联网站或者B/S系统的服务端上，重视服务的响应速度，希望系统停顿时间最短的应用
+
+3、基于“标记—清除”算法实现的
+
+4、CMS收集器的内存回收过程是与用户线程一起并发执行的
+
+5、它的运作过程分为4个步骤，包括：
+
+初始标记，“Stop The World”，只是标记一下GC Roots能直接关联到的对象，速度很快
+
+并发标记，并发标记阶段就是进行GC RootsTracing的过程
+
+重新标记，Stop The World”，是为了修正并发标记期间因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，但远比并发标记的时间短
+
+并发清除（CMS concurrent sweep）
+
+6、优点：并发收集、低停顿
+
+7、缺点：
+
+对CPU资源非常敏感。
+无法处理浮动垃圾，可能出现“Concurrent Mode Failure”失败而导致另一次Full GC的产生。
+一款基于“标记—清除”算法实现的收集器
+
+```
+-XX:+UseConcMarkSweepGC 应用CMS收集器
+
+-XX:ConcGCThreads 设置并发线程数量
+
+-XX:CMSInitiatingOccupancyFraction 设置当老年代空间实用率达到百分比值时进行一次cms回收,默认为68，当老年代的空间使用率达到68%的时候，会执行CMS回收
+
+如果内存使用率增长的很快，在CMS执行的过程中，已经出现了内存不足的情况，此时CMS回收就会失败，虚拟机将启动老年代串行回收器进行垃圾回收，这回导致应用程序中断，直到垃圾回收完成后才会正常工作，这个过程GC的停顿时间可能较长，所以该值需要根据实际情况设置。
+
+-XX:+UseCMSCompactAtFullCollection 设置cms在垃圾收集完成后进行一次内存碎片整理
+
+-XX:CMSFullGCsBeforeCompaction 设定进行多少次cms回收后，进行一次内存压缩。
+```
+
+![structure](https://github.com/tangyibo/tangyibo.github.io/blob/master/_posts/imgs/gc_5.png?raw=true)
+
+- G1（Garbage-First）收集器
+
+1、当今收集器技术发展的最前沿成果之一
+
+2、G1是一款面向服务端应用的垃圾收集器。
+
+3、优点：
+
+并行与并发：充分利用多CPU、多核环境下的硬件优势
+
+分代收集：不需要其他收集器配合就能独立管理整个GC堆
+
+空间整合：“标记—整理”算法实现的收集器，局部上基于“复制”算法不会产生内存空间碎片
+
+可预测的停顿：能让使用者明确指定在一个长度为M毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒
+
+4、G1收集器的运作大致可划分为以下几个步骤：
+
+初始标记：标记一下GC Roots能直接关联到的对象，需要停顿线程，但耗时很短
+
+并发标记：是从GC Root开始对堆中对象进行可达性分析，找出存活的对象，这阶段耗时较长，但可与用户程序并发执行
+
+最终标记：修正在并发标记期间因用户程序继续运作而导致标记产生变动的那一部分标记记录
+
+筛选回收：对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划
+
+```
+-XX:+UserG1Gc 应用G1收集器
+
+-XX:MaxGCPauseMillis 指定最大停顿时间
+
+-XX:ParallelGCThreads 设置并行回收的线程数量
+```
+
+![structure](https://github.com/tangyibo/tangyibo.github.io/blob/master/_posts/imgs/gc_6.png?raw=true)
