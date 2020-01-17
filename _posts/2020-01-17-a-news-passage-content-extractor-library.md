@@ -326,7 +326,7 @@ print ret
 
 # 四、演示服务
 
-到页面：https://gitee.com/inrgihc/libnpce/tree/master/python/server/publish中下载：httpd_npce_py-v1.0-bin.tar.gz文件，在centos环境下解压，然后执行startup.sh命令启动服务，打开浏览器访问服务器上的服务：
+到页面：https://gitee.com/inrgihc/libnpce/attach_files/327927/download下载httpd_npce_py-v1.0-bin.tar.gz文件，在centos环境下解压，然后执行startup.sh命令启动服务，打开浏览器访问服务器上的服务：
 
 http://127.0.0.1:7645
 
