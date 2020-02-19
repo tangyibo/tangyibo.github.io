@@ -1,3 +1,16 @@
+---
+layout: post
+title: Janino框架初识与使用教程|Java编程 
+category: Git
+tag: [JAVA]
+---
+
+这篇文章主要介绍Janino框架初识与使用教程。
+本文分为以下几个部分：
+1. Janino简介
+2. Janino的应用
+3. Janino的使用教程
+
 # Janino框架初识与使用教程
  
 ## 一、 Janino简介
