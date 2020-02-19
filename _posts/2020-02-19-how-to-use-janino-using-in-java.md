@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Janino框架初识与使用教程|Java编程 
-category: Git
+category: JAVA
 tag: [JAVA]
 ---
 
