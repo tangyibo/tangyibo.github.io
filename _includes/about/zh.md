@@ -25,6 +25,12 @@ Hey，我是Tang.当前就职于锐捷网络
 
 - (2) 我的Github空间：https://tangyibo.github.io(https://tangyibo.github.io/)
 
+## 四、发布的文章
+
+- (1) [Greenplum6 JDBC insert 性能媲美 MySQL](https://www.toutiao.com/i6781612930187133451/?tt_from=weixin&utm_campaign=client_share&wxshare_count=1&timestamp=1582692418&app=news_article&utm_source=weixin&utm_medium=toutiao_android&req_id=202002261246570101290351370F19509B&group_id=6781612930187133451)
+
+
+
 ## 四、关注于我
 
 (1) 👉 戳 [Github](http://github.com/tangyibo)
