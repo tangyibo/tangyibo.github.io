@@ -41,6 +41,14 @@ jstatd -J-Djava.security.policy=jstatd.all.policy
 
 **注意**如果你点开一个远程进程，那么你会发现有些信息是没有的，比如：CPU、线程、和MBeans。这是正常的，如果需要这些信息（就像监控本地Java进程一样），那么就需要用JMX
 
+为Java程序开启JMX很简单，只要在运行Java程序的命令后面指定如下命令即可:
+
+```
+-Djava.rmi.server.hostname=127.0.0.1               //远程主机的IP地址
+-Dcom.sun.management.jmxremote.port=1000           //开启JMX服务的端口号，在使用VisualVM连接JMX时需要
+-Dcom.sun.management.jmxremote.ssl=false           //不开启ssl
+-Dcom.sun.management.jmxremote.authenticate=false  //不开启认证
+```
 
 ### 参考地址
 - https://segmentfault.com/a/1190000016634627
